@@ -23,6 +23,26 @@ angular.module('starter', ['ionic','uiGmapgoogle-maps'])
 
 }])
 
-.controller('MapsCtrl',['$scope',function($scope){
-  $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+.controller('MapsCtrl',['$scope','$ionicLoading',
+  function($scope,$ionicLoading){
+
+    $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 15 };
+
+      $ionicLoading.show({
+        template: 'Loading...'
+      });
+
+    navigator.geolocation.getCurrentPosition(function(pos) {
+      
+      $ionicLoading.hide();
+      $scope.map = { center: { latitude: pos.coords.latitude, longitude: pos.coords.longitude }, zoom: 15 };
+      $scope.$apply()
+
+    }, function(error) {
+
+      $ionicLoading.hide();
+      alert('Unable to get location: ' + error.message);
+      
+    });
+
 }])
